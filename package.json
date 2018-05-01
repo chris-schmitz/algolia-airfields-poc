@@ -1,0 +1,31 @@
+{
+  "name": "airfields",
+  "description": "A Vue.js project",
+  "version": "1.0.0",
+  "author": "chris-schmitz <schmitz.chris@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.27.0",
+    "google-maps": "^3.3.0",
+    "node-sass": "^3.13.1",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.2",
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.1",
+    "cross-env": "^3.2.4",
+    "css-loader": "^0.26.4",
+    "file-loader": "^0.9.0",
+    "vue-loader": "^10.3.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.11.2"
+  }
+}
