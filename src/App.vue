@@ -31,141 +31,146 @@
 </template>
 
 <script>
-const config = require('../config')
+const config = require("../config")
 
-const algoliasearch = require('algoliasearch')
+const algoliasearch = require("algoliasearch")
 
-let client = algoliasearch(config.algolia.applicationId, config.algolia.searchOnlyApiKey, {protocol: 'https:'})
+let client = algoliasearch(
+    config.algolia.applicationId,
+    config.algolia.searchOnlyApiKey,
+    { protocol: "https:" }
+)
 // let client = algoliasearch(config.algolia.applicationId, config.algolia.adminApiKey, {protocol: 'https:'})
-let index = client.initIndex('airports') // the index name used refers to the indices to use in your algolia dashboard
+let index = client.initIndex("airports") // the index name used refers to the indices to use in your algolia dashboard
 
-const GoogleMapsLoader = require('google-maps')
-
+const GoogleMapsLoader = require("google-maps")
 
 export default {
-    name: 'app',
+    name: "app",
     data() {
         return {
-            content: '',
+            content: "",
             map: null,
-            markers:[],
+            markers: [],
             error: null,
-            newObject: '',
-            searchString: '',
+            newObject: "",
+            searchString: "",
             notification: {
-                message: '',
+                message: "",
                 show: false,
-                type: 'error'
+                type: "error"
             }
         }
     },
-    methods:{
-        searchIndex(){
+    methods: {
+        searchIndex() {
             let string = this.searchString
             index.search(string, (err, content) => {
-                if(err){
+                if (err) {
                     console.error(err)
-                    this.showNotification(err.message, 'error')
+                    this.showNotification(err.message, "error")
                 } else {
-                    this.showNotification('Results found', 'success')
+                    this.showNotification("Results found", "success")
                     this.content = content.hits
                     this.setMarkers()
                 }
             })
         },
-        setMarkers(){
+        setMarkers() {
             this.clearMarkers()
-            this.content.map(airport => {
-                let re = /(\w{1})(\d{2})(\d.+)/
-                let explodedLat = re.exec(airport.Latitude)
-                airport.lat = Number(`${explodedLat[2]}.${explodedLat[3]}`)
-                airport.lat = Number(`${explodedLat[2]}.${explodedLat[3]}`)
+            this.content
+                .map(airport => {
+                    let re = /(\w{1})(\d{2})(\d.+)/
+                    let explodedLat = re.exec(airport.Latitude)
+                    airport.lat = Number(`${explodedLat[2]}.${explodedLat[3]}`)
+                    airport.lat = Number(`${explodedLat[2]}.${explodedLat[3]}`)
 
-                let explodedLng = re.exec(airport.Longitude)
-                airport.lng = Number(`${explodedLng[2]}.${explodedLng[3]}`)
-                airport.lng = Number(`${explodedLng[2]}.${explodedLng[3]}`)
-                return airport
-            })
-            .forEach(airport => {
-                this.markers.push(this.makeMarker(airport.lat, airport.lng))
-            })
+                    let explodedLng = re.exec(airport.Longitude)
+                    airport.lng = Number(`${explodedLng[2]}.${explodedLng[3]}`)
+                    airport.lng = Number(`${explodedLng[2]}.${explodedLng[3]}`)
+                    return airport
+                })
+                .forEach(airport => {
+                    this.markers.push(this.makeMarker(airport.lat, airport.lng))
+                })
             this.fitBounds()
         },
-        clearMarkers(){
-            debugger
+        clearMarkers() {
             this.markers.forEach(marker => {
                 marker.setMap(null)
             })
             this.markers = []
         },
-        makeMarker(lat,lng){
-            console.log('marker placed')
+        makeMarker(lat, lng) {
+            console.log("marker placed")
             return new google.maps.Marker({
-                position: {lat,lng},
+                position: { lat, lng },
                 map: this.map
-            });
+            })
         },
-        fitBounds(){
-            var bounds = new google.maps.LatLngBounds();
+        fitBounds() {
+            var bounds = new google.maps.LatLngBounds()
             for (var i = 0; i < this.markers.length; i++) {
-                bounds.extend(this.markers[i].getPosition());
+                bounds.extend(this.markers[i].getPosition())
             }
 
-            this.map.fitBounds(bounds);
+            this.map.fitBounds(bounds)
         },
-        showNotification(message, type){
+        showNotification(message, type) {
             this.notification.message = message
             this.notification.type = type
             this.notification.show = true
         },
-        hideNotification(){
-            this.notification.message = ''
+        hideNotification() {
+            this.notification.message = ""
             this.notification.show = false
         }
     },
-    mounted(){
+    mounted() {
         GoogleMapsLoader.KEY = "AIzaSyApFDlPdNA2_EMMUao5y0oC-27zwS2sEhY"
         GoogleMapsLoader.load(google => {
-            this.map = new google.maps.Map(document.getElementById('map'), {
-                zoom:4,
-                center: {lat: 46.227638, lng: 2.213749} })
+            this.map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: { lat: 46.227638, lng: 2.213749 }
+            })
         })
     }
 }
 </script>
 <style>
-    body,html{
-        height: 100%;
-        width: 100%;
-        padding:0;
-        margin:0;
-        box-sizing: border-box;
-    }
-    body{
-        display:flex;
-        justify-content: center;
-    }
+body,
+html {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+    justify-content: center;
+}
 
-    .content{
-    }
+.content {
+}
 
-    #app{
-        display: flex;
-        flex:1;
-    }
-    .left-side{
-        flex: 1;
-        overflow-x: scroll;
-    }
+#app {
+    display: flex;
+    flex: 1;
+}
+.left-side {
+    flex: 1;
+    overflow-x: scroll;
+}
 
-    .map-container{
-        flex: 2;
-        display: flex;
-        /*height:100px;
+.map-container {
+    flex: 2;
+    display: flex;
+    /*height:100px;
         width: 100px;*/
-    }
+}
 
-    #map{
-        flex: 1;
-    }
+#map {
+    flex: 1;
+}
 </style>

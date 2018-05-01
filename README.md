@@ -1,10 +1,12 @@
 # airfields
 
-> A Vue.js project
+> A proof of concept for integrating Algolia, Google Maps, and Vue
+
+![demo](readme_attachments/demo.gif)
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
